@@ -65,7 +65,7 @@ public class PersonResource {
 	@PutMapping("/{code}")
 	public ResponseEntity<Person> updatePerson(@PathVariable Long code, @Valid @RequestBody Person person) {
 		Person personSaved = personService.updatePerson(code, person);
-		return ResponseEntity.ok(person);
+		return ResponseEntity.ok(personSaved);
 	}
 	
 	@PutMapping("/{code}/ativo")

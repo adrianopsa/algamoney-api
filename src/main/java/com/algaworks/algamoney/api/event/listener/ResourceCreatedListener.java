@@ -5,9 +5,11 @@ import java.net.URI;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.context.ApplicationListener;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.algaworks.algamoney.api.event.CreatedResourceEvent;
 
+@Component
 public class ResourceCreatedListener implements ApplicationListener<CreatedResourceEvent>{
 
 	@Override

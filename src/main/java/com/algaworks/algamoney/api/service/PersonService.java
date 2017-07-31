@@ -28,7 +28,7 @@ public class PersonService {
 		personRepository.save(personSaved);
 	}
 	
-	private Person findPersonForCode(Long code) {
+	public Person findPersonForCode(Long code) {
 		Person personSaved = personRepository.findOne(code);
 		
 		if(personSaved == null) {
