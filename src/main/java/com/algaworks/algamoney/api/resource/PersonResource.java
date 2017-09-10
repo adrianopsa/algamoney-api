@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,7 +42,8 @@ public class PersonResource {
 	}
 	
 	
-	@PostMapping	
+	@PostMapping
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_PESSOA') and #oauth2.hasScope('write')")
 	public ResponseEntity<Person> createNewPerson(@Valid @RequestBody Person person, HttpServletResponse response) {
 		 Person personSaved = personRepository.save(person);		
 		 publisher.publishEvent(new CreatedResourceEvent(this,response,personSaved.getCode()));
@@ -50,6 +52,7 @@ public class PersonResource {
 	}
 	
 	@GetMapping("/{code}")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_PESSOA') and #oauth2.hasScope('read')")
 	public ResponseEntity<Person> searchForId(@PathVariable Long code) {
 		Person person = personRepository.findOne(code);		
 		return person != null ? ResponseEntity.ok(person) : ResponseEntity.notFound().build();
@@ -63,12 +66,14 @@ public class PersonResource {
 	}
 	
 	@PutMapping("/{code}")
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_PESSOA') and #oauth2.hasScope('write')")
 	public ResponseEntity<Person> updatePerson(@PathVariable Long code, @Valid @RequestBody Person person) {
 		Person personSaved = personService.updatePerson(code, person);
 		return ResponseEntity.ok(personSaved);
 	}
 	
-	@PutMapping("/{code}/ativo")
+	@PutMapping("/{code}/active")
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_PESSOA') and #oauth2.hasScope('write')")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void updatePropertyActive(@PathVariable Long code , @RequestBody Boolean active) {
 		personService.updatePropertyActive(code,active);

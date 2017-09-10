@@ -1,6 +1,6 @@
 package com.algaworks.algamoney.api.model;
 
-public enum Launchtype {
+public enum LaunchType {
 
 		RECEITA,
 		DESPESA

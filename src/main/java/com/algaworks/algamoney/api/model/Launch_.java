@@ -16,7 +16,7 @@ public abstract class Launch_ {
 	public static volatile SingularAttribute<Launch, LocalDate> dueDate;
 	public static volatile SingularAttribute<Launch, String> description;
 	public static volatile SingularAttribute<Launch, LocalDate> paymentDate;
-	public static volatile SingularAttribute<Launch, Launchtype> type;
+	public static volatile SingularAttribute<Launch, LaunchType> type;
 	public static volatile SingularAttribute<Launch, Category> category;
 	public static volatile SingularAttribute<Launch, BigDecimal> value;
 

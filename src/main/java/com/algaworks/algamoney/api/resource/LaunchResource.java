@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +30,7 @@ import com.algaworks.algamoney.api.exceptionHandler.AlgamoneyExceptionHandler.Er
 import com.algaworks.algamoney.api.model.Launch;
 import com.algaworks.algamoney.api.repository.LaunchRepository;
 import com.algaworks.algamoney.api.repository.filter.LaunchFilter;
+import com.algaworks.algamoney.api.repository.projection.SummaryRelease;
 import com.algaworks.algamoney.api.service.exception.NoOrInactivePersonException;
 
 @RestController
@@ -45,11 +47,20 @@ public class LaunchResource {
 	private MessageSource messageSource;
 	
 	@GetMapping
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and #oauth2.hasScope('read')")
 	public Page<Launch> search(LaunchFilter launchFilter, Pageable pageable) {
 		return launchRepository.filter(launchFilter, pageable);
 	}
 	
+	@GetMapping(params="summary")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and #oauth2.hasScope('read')")
+	public Page<SummaryRelease> summarize(LaunchFilter launchFilter, Pageable pageable) {
+		return launchRepository.summarize(launchFilter, pageable);
+	}
+	
+	
 	@GetMapping("/{code}")
+	@PreAuthorize("hasAuthority('ROLE_PESQUISAR_LANCAMENTO') and #oauth2.hasScope('read')")
 	public ResponseEntity<Launch> searchForId(@PathVariable Long code) {
 		Launch launch = launchRepository.findOne(code);		
 		return launch != null ? ResponseEntity.ok(launch) : ResponseEntity.notFound().build(); 
@@ -57,6 +68,7 @@ public class LaunchResource {
 	
 	
 	@PostMapping
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_LANCAMENTO') and #oauth2.hasScope('write')")
 	public ResponseEntity<Launch> createNewLaunch(@Valid @RequestBody Launch launch, HttpServletResponse response) {
 		
 		Launch launchSaved= launchRepository.save(launch);		

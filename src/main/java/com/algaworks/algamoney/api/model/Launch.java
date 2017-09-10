@@ -41,7 +41,7 @@ public class Launch {
 	
 	@NotNull
 	@Enumerated(EnumType.STRING)
-	private Launchtype type;
+	private LaunchType type;
 
 	@NotNull
 	@ManyToOne
@@ -101,11 +101,11 @@ public class Launch {
 		this.note = note;
 	}
 
-	public Launchtype getType() {
+	public LaunchType getType() {
 		return type;
 	}
 
-	public void setType(Launchtype type) {
+	public void setType(LaunchType type) {
 		this.type = type;
 	}
 
