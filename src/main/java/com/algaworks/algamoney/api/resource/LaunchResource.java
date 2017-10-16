@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -31,6 +32,7 @@ import com.algaworks.algamoney.api.model.Launch;
 import com.algaworks.algamoney.api.repository.LaunchRepository;
 import com.algaworks.algamoney.api.repository.filter.LaunchFilter;
 import com.algaworks.algamoney.api.repository.projection.SummaryRelease;
+import com.algaworks.algamoney.api.service.LaunchService;
 import com.algaworks.algamoney.api.service.exception.NoOrInactivePersonException;
 
 @RestController
@@ -39,6 +41,9 @@ public class LaunchResource {
 	
 	@Autowired
 	private LaunchRepository launchRepository;
+	
+	@Autowired
+	private LaunchService launchService;
 
 	@Autowired
 	private ApplicationEventPublisher publisher; 
@@ -94,6 +99,17 @@ public class LaunchResource {
 		List<Error> errors = Arrays.asList(new Error(userMessage, developerMessage));
 		
 		return ResponseEntity.badRequest().body(errors);
+	}
+	
+	@PutMapping("/{code}")
+	@PreAuthorize("hasAuthority('ROLE_CADASTRAR_LANCAMENTO')")
+	public ResponseEntity<Launch> updateLaunch(@PathVariable Long code, @Valid @RequestBody Launch launch) {
+		try {
+			Launch launchSave = launchService.update(code, launch);
+			return ResponseEntity.ok(launchSave);
+		} catch (IllegalArgumentException e) {
+			return ResponseEntity.notFound().build();
+		}
 	}
 
 }
