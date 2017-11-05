@@ -5,14 +5,23 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("algamoney")
 public class AlgamoneyApiProperty {
 	
+	private String allowedOrigin= "http://localhost:8000";
+
 	private final Security security = new Security();
 	
-	private String allowedOrigin= "http://localhost:8000";
 	
 	public Security getSecurity() {
 		return security;
 	}
 	
+	public String getAllowedOrigin() {
+		return allowedOrigin;
+	}
+	
+	public void setAllowedOrigin(String allowedOrigin) {
+		this.allowedOrigin = allowedOrigin;
+	}
+
 	public class Security {
 		
 		private boolean enableHttps;
@@ -28,13 +37,6 @@ public class AlgamoneyApiProperty {
 		
 	}
 
-	public String getAllowedOrigin() {
-		return allowedOrigin;
-	}
-
-	public void setAllowedOrigin(String allowedOrigin) {
-		this.allowedOrigin = allowedOrigin;
-	}
 
 
 	

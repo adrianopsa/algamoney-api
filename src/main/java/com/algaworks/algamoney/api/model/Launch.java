@@ -30,7 +30,7 @@ public class Launch {
 	@Column(name="due_date")
 	private LocalDate dueDate;
 	
-	@NotNull
+	
 	@Column(name="payment_date")
 	private LocalDate paymentDate;
 	
